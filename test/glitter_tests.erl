@@ -1,7 +1,7 @@
 -module(glitter_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--define(TEST_FILE, "../test/test.conf").
+-define(TEST_FILE, "../test/fake-admin/conf/test.conf").
 
 setup() ->
   ok = application:set_env(glitter, config_file, "../test/example.conf"),
@@ -42,7 +42,8 @@ readwrite_glitter_test_() ->
      fun add_user_to_repos/0,
      fun add_user_to_repos_that_doesnt_exist/0,
      fun remove_user_from_repos/0,
-     fun set_and_list_groups/0
+     fun set_and_list_groups/0,
+     fun add_user/0
     ]
    }
   }.
@@ -104,6 +105,17 @@ remove_user_from_repos() ->
   {config, UpdatedRepos, _} = conf_reader:parse_file(?TEST_FILE),
   UpdatedUsers = proplists:get_value("removetest", UpdatedRepos),
   ?assertEqual([{"b", "RW+"}], UpdatedUsers).
+
+add_user() ->
+  PubkeyDir = filename:dirname(?TEST_FILE) ++ "/../keydir",
+  PubkeyFile = filename:join([PubkeyDir, "username.pub"]),
+
+  glitter:add_user("username", "pubkeypubkey"),
+
+  true = filelib:is_file(PubkeyFile),
+  {ok, Pubkey} = file:read_file(PubkeyFile),
+  "pubkeypubkey" = binary_to_list(Pubkey),
+  passed.
 
 set_and_list_groups() ->
   glitter:set_group("@agroup", ["a", "b"]),

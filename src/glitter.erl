@@ -365,16 +365,12 @@ handle_remove_user_from_repos(Name, UserName,
 
 handle_add_new_user_and_key(UserName, Pubkey,
                             #state{config_file = ConfigFile} = State) ->
-  case find_file_by_name(UserName, State) of
-    {error, not_found} ->
-      Dirname = filename:dirname(ConfigFile),
-      PubKeyfile =
-        filename:join([Dirname, "keydir", lists:append(UserName, ".pub")]),
-      {ok, Fd} = file:open(PubKeyfile, [write]),
-      file:write(Fd, Pubkey),
-      file:close(Fd);
-    {ok, _Pubname}  -> ok
-  end,
+  Dirname = filename:dirname(ConfigFile),
+  PubKeyfile =
+    filename:join([Dirname, "..", "keydir", lists:append(UserName, ".pub")]),
+  {ok, Fd} = file:open(PubKeyfile, [write]),
+  file:write(Fd, Pubkey),
+  file:close(Fd),
   State.
 
 handle_list_groups(Config) ->
@@ -398,18 +394,6 @@ find_already_defined_repos(Name, Repos) ->
 
 flush(#state{config = Config, config_file = ConfigFile}) ->
   conf_writer:write(Config, ConfigFile).
-
-find_file_by_name(Name, #state{config_file = ConfigFile}) ->
-  {ok, Files} = file:list_dir(filename:dirname(ConfigFile)),
-  find_file_by_name1(Name, Files).
-
-find_file_by_name1(_Name, []) -> {error, not_found};
-find_file_by_name1(Name, [K|Rest]) ->
-  Pubname = lists:append([Name, ".pub"]),
-  case K =:= Pubname of
-    true -> {ok, Pubname};
-    false -> find_file_by_name1(Name, Rest)
-  end.
 
 handle_commit(ConfigFile) ->
   Dirname = filename:dirname(ConfigFile),
