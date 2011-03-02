@@ -6,7 +6,18 @@ It was originally part of a larger cloud project that provide basic
 cloud app/deployment workflow, similar to what Heroku offers (Heroku.com 
 for details).
 
+== Basic setup and usage
+Glitter runs as either an erlang demaen process or under erlang shell.
 
+This plugin depends on erlang and openssh. Please ensure these dependency
+be setup beforehand. Only tested using Erlang R14B or above.
+
+First setup:
+- make clean
+- make install
+
+
+== Architecture Brief Description
 
 
 
