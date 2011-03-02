@@ -29,11 +29,6 @@ Sample Erlang client call code
 
 
 
-
-== Architecture Brief Description
-
-
-
 == Development ==
 It is recommend that you set up your own git server and gitolite to 
 test it out on integeration level; preferrably sending command from 
