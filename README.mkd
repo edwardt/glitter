@@ -1,5 +1,20 @@
 Glitter
-===
+==
+This is an erlang binding to gitolite. It is an abstraction to provide 
+flexibility in case we need to swap gitolite for something else.
+It was originally part of a larger cloud project that provide basic 
+cloud app/deployment workflow, similar to what Heroku offers (Heroku.com 
+for details).
+
+
+
+
+
+== Development ==
+It is recommend that you set up your own git server and gitolite to 
+test it out on integeration level; preferrably sending command from 
+a seperate client machine. Passing/Failing unit tests may not be 
+sufficient to weed out account/process/file ownership issues.
 
 Parse and write configs for the gitolite admin repositories.
 
