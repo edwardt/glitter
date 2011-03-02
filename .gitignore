@@ -3,6 +3,10 @@
 *.script
 *.rel
 erl_crash.dump
+*.log
+*.txt
+deps
+*.~
 .eunit
 *.conf
 *.pub
