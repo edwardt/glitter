@@ -37,6 +37,15 @@ sufficient to weed out account/process/file ownership issues.
 
 Parse and write configs for the gitolite admin repositories.
 
+
+== Architecture ==
+Glitter is an erlang application. It consists of three levels. 
+Starting from outmost layer - module glitter - act as a gateway 
+to serve client proper erlang messages; special message formats
+are assumed to have already properly transformed in prior stage.
+
+
+
 ### Status
 
 Parsing is functional.

@@ -10,6 +10,7 @@
   glitter,
   glitter_app,
   glitter_sup,
+  gen_server_cluster,
   make_boot
   ]},
   {registered,   []},
