@@ -66,42 +66,82 @@ app_util_test_()->
       fun app_stop_undef_app_test_case/0,
       fun set_appvalue_test_case/0,
       fun set_appvalue_undef_key_test_case/0,
-      fun set_appvalue_undef_app_test_case/0
       fun get_all_value_test_case/0,
       fun get_value_test_case/0,
       fun get_value_undef_app_test_case/0,
-      fun get_value_undef_key_test_case/0,
-      fun get_default_value_test_case/0
+      fun get_value_undef_key_test_case/0
+
     ]
   }.
+setup() ->
+ ok.
 
+cleanup(State) -> 
+ ok.
+ 
 app_start_test_case() ->
+  Ret0 = ensure_app_stop(sasl),  
+  Ret = ensure_app_start(sasl),
+  ?assertMatch(ok, Ret).
   
- .
 app_already_start_test_case()->
- .
+ Ret = ensure_app_stop(sasl),
+ Ret0 = ensure_app_start(sasl),
+ Ret1 = ensure_app_start(sasl),
+ ?assertMatch(ok, Ret1).
+ 
 app_start_undef_app_test_case()->
- .
+ Ret = ensure_app_start(undefine),
+ ?assertMatch({"no such file or directory",_}, Ret).
+ 
 app_stop_test_case()->
- .
+ Ret = ensure_app_start(sasl),
+ Ret0 = ensure_app_stop(sasl),
+ ?assertEqual(ok, Ret0).
+ 
 app_already_stop_test_case()->
- .
+ Ret = ensure_app_start(sasl),
+ Ret0 = ensure_app_stop(sasl),
+ Ret1 = ensure_app_stop(sasl),
+ ?assertEqual(ok, Ret1).
+ 
 app_stop_undef_app_test_case()->
- .
+ Ret = ensure_app_stop(undefine),
+ ?assertMatch({"not started",_}, Ret).
+
 set_appvalue_test_case()->
- .
+ Ret = set_value(testapp, testkey, test_val),
+ ?assertEqual(ok, Ret),
+ Ret0 = application:get_env(testapp,testkey),
+ ?assertMatch({testapp,testkey},Ret0).
+ 
 set_appvalue_undef_key_test_case()->
- .
+ Ret = set_value(testapp, testkey, test_val),
+ ?assertEqual(undefine, Ret).
+ 
 set_appvalue_undef_app_test_case()->
- .
+ Ret = set_value(undefined,undefined,test),
+ ?assertEqual(undefined,Ret).
+ 
 get_all_value_test_case()->
- .
+ ok = set_value(testapp, testkey, testvalue),
+ ok = set_value(testapp, testkey1, testvalue1),
+ Ret = get_all_value(testapp),
+ ?assertMatch([{testkey, testvalue}, {testkey1, testvalue1}],
+              Ret).
+ 
 get_value_test_case()->
- .
+ ok = set_value(testapp1,testkey1,testvalue),
+ Ret = get_value(testapp1, testkey1),
+ ?assertEqual({testkey1,testvalue}, Ret).
+ 
 get_value_undef_app_test_case()->
- .
-get_value_undef_key_test_case()->
- .
-get_default_value_test_case()->
- .
+ Ret = get_value(undefined,somekey),
+ ?assertEqual(undefined, Ret) .
+ 
+get_value_undef_key_test_case()-> 
+ Ret = get_value(testapp,somekey),
+ ?assertEqual(undefined, Ret) .
+ 
+
 -endif.
