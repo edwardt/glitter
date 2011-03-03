@@ -22,8 +22,11 @@ ensure_app_start(AppName) when is_atom(AppName) ->
   end.
 
 ensure_app_stop(AppName) when is_atom(AppName) ->
+
   case application:stop(AppName) of
        ok -> ok;
+       {error, {"no such file or directory", App}} ->
+               {error, {"no such file or directory", App}};
        {error, {not_started, _}} -> ok;
        {error, ERROR} -> {error, ERROR}
   end.  
@@ -92,7 +95,7 @@ app_already_start_test_case()->
 app_start_undef_app_test_case()->
  Ret = ensure_app_start(undefined),
  io:format("Return value: ~p",[Ret]),
- {error, _} = Ret.
+ {error, {"no such file or directory", _App}} = Ret.
 % ?assert(ok = ({error,_} = Ret)).
 % ?assertError({"no such file or directory","undefined.app"}, Ret).
  
