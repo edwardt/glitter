@@ -8,11 +8,11 @@ CFLAGS					= +debug_info -W0 -I $(INCLUDE_DIRS) -pa $(EBIN) -I gen-erl/
 COMPILE					= $(CC) $(CFLAGS) -o $(EBIN)
 DEPS_DIR 				= deps
 EBIN_DIRS				= $(wildcard $(DEPS_DIR)/*/ebin) $(wildcard include/*/ebin)
-APP							= glitter
+APP					= glitter
 
 .PHONY: deps
 
-all: compile
+all: compile boot
 
 compile: deps
 	@(./rebar compile)
@@ -21,7 +21,7 @@ deps:
 	@(./rebar get-deps)
 
 boot:
-	(cd ebin; $(ERL) -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot write_scripts $(APP) $(VERSION);)
+	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot write_scripts $(APP) $(VERSION);)
 
 edoc:
 	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[{preprocess, true},{includes, ["."]}]'
@@ -31,5 +31,6 @@ test: compile
 
 distclean: clean
 	@(./rebar delete-deps)
+	
 clean:
 	@(./rebar clean)
