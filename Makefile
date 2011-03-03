@@ -23,6 +23,9 @@ deps:
 boot:
 	(cd ebin; $(ERL) -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot write_scripts $(APP) $(VERSION);)
 
+edoc:
+	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[{preprocess, true},{includes, ["."]}]'
+
 test: compile
 	@(./rebar skip_deps=true eunit)
 
