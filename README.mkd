@@ -6,30 +6,32 @@ It was originally part of a larger cloud project that provide basic
 cloud app/deployment workflow, similar to what Heroku offers (Heroku.com 
 for details).
 
-== Basic setup ==
+Basic setup 
+==
 Glitter runs as either an erlang demaen process or under erlang shell.
-
+==
 This plugin depends on erlang and openssh. Please ensure these dependency
 be setup beforehand. Only tested using Erlang R14B or above.
 
 First setup:
-- make clean
-- make install
+== * make clean
+== * make install
 
-== Basic usage == 
-* Creating Orgnization
-* Creating New Repo
-* Removing Existing Repo
-* Createing New Repo Branch
-* Removing Existing Repo Branch
-* Adding membership and membership rights on a Repo/ Repo Branch
-* Removing membership and membership rights on a Repo/ Repo Branch
+### Basic usage == 
+== * Creating Orgnization
+== * Creating New Repo
+== * Removing Existing Repo
+== * Createing New Repo Branch
+== * Removing Existing Repo Branch
+== * Adding membership and membership rights on a Repo/ Repo Branch
+== * Removing membership and membership rights on a Repo/ Repo Branch
 
-Sample Erlang client call code
+### Sample Erlang client call code
 
 
 
-== Development ==
+### Development 
+==
 It is recommend that you set up your own git server and gitolite to 
 test it out on integeration level; preferrably sending command from 
 a seperate client machine. Passing/Failing unit tests may not be 
@@ -38,7 +40,9 @@ sufficient to weed out account/process/file ownership issues.
 Parse and write configs for the gitolite admin repositories.
 
 
-== Architecture ==
+### Architecture 
+== 
+
 Glitter is an erlang application. It consists of three levels. 
 Starting from outmost layer - module glitter - act as a gateway 
 to serve client proper erlang messages; special message formats
