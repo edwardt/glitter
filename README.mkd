@@ -14,7 +14,8 @@ Glitter runs as either an erlang demaen process or under erlang shell.
 This plugin depends on erlang and openssh. Please ensure these dependency
 be setup beforehand. Only tested using Erlang R14B or above.
 
-First setup:
+Installation
+
 * make clean
 * make install
 
