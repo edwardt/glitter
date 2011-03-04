@@ -9,6 +9,7 @@ COMPILE					= $(CC) $(CFLAGS) -o $(EBIN)
 DEPS_DIR 				= deps
 EBIN_DIRS				= $(wildcard $(DEPS_DIR)/*/ebin) $(wildcard include/*/ebin)
 APP					= glitter
+VERBOSE				        = -v
 
 .PHONY: deps
 
@@ -30,10 +31,11 @@ test: compile
 	@(./rebar skip_deps=true eunit)
 
 get-deps: clean
-	@(./rebar get-deps)
+	@(./rebar $(VERBOSE) get-deps)
 
 delete-deps: 
-	@(./rebar delete-deps)
+	@(./rebar $(VERBOSE) delete-deps)
 	
 clean:
-	@(./rebar clean)
+	@(./rebar $(VERBOSE) clean)
+
