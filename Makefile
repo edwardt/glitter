@@ -29,7 +29,10 @@ edoc:
 test: compile
 	@(./rebar skip_deps=true eunit)
 
-distclean: clean
+get-deps: clean
+	@(./rebar get-deps)
+
+delete-deps: 
 	@(./rebar delete-deps)
 	
 clean:
