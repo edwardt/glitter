@@ -19,7 +19,8 @@ Installation
 * make clean
 * make install
 
-### Basic usage
+Basic usage
+==
 * Creating Orgnization
 * Creating New Repo
 * Removing Existing Repo
@@ -28,11 +29,11 @@ Installation
 * Adding membership and membership rights on a Repo/ Repo Branch
 * Removing membership and membership rights on a Repo/ Repo Branch
 
-### Sample Erlang client call code
+Sample Erlang client call code
+==
 
-
-
-### Development 
+Development 
+==
 
 It is recommend that you set up your own git server and gitolite to 
 test it out on integeration level; preferrably sending command from 
@@ -42,8 +43,8 @@ sufficient to weed out account/process/file ownership issues.
 Parse and write configs for the gitolite admin repositories.
 
 
-### Architecture 
-
+Architecture 
+==
 Glitter is an erlang application. It consists of three levels. 
 Starting from outmost layer - module glitter - act as a gateway 
 to serve client proper erlang messages; special message formats
@@ -51,8 +52,8 @@ are assumed to have already properly transformed in prior stage.
 
 
 
-### Status
-
+Status
+==
 Parsing is functional.
 Writing is functional.
 
