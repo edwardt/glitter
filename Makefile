@@ -16,7 +16,7 @@ RELEASE					= write_release_scripts
 
 .PHONY: deps
 
-all: compile boot
+all: compile
 
 compile: deps
 	@($(REBAR) compile)
@@ -24,11 +24,14 @@ compile: deps
 deps:
 	@($(REBAR) get-deps)
 
-boot:
+
+boot_fixme:
 	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(LOCAL) $(APP) $(VERSION);)
 
-bootRel:
+bootRel_fixme:
 	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(RELEASE) $(APP) $(VERSION);)
+
+
 
 
 edoc:

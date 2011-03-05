@@ -1,17 +1,16 @@
-%%%-------------------------------------------------------------------
-%%% File    : glitter_app.erl
-%%% Author  : Ari Lerner
-%%% Description : 
-%%%
-%%% Created :  Sat Dec 19 02:46:39 PST 2009
-%%%-------------------------------------------------------------------
-
--module (glitter_app).
+-module(glitter_app).
 
 -behaviour(application).
 
+%% Application callbacks
 -export([start/2, stop/1]).
 
-start(_Type, _Args) -> glitter_sup:start_link().
+%% ===================================================================
+%% Application callbacks
+%% ===================================================================
 
-stop(_State) -> ok.
+start(_StartType, _StartArgs) ->
+    glitter_sup:start_link().
+
+stop(_State) ->
+    ok.

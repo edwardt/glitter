@@ -1,0 +1,25 @@
+{application, glitter,
+ [
+  {description, "Erlang interface for gitolite. "},
+  {vsn, "0.2"},
+  {registered, [glitter]},
+  {modules,      
+    [
+     conf_reader,
+     conf_writer,
+     glitter,
+     glitter_app,
+     glitter_sup,
+     glitter_conf,
+     app_util,
+     gen_server_cluster
+  ]},
+  {applications, [
+                  kernel,
+                  stdlib, 
+		  sasl,
+		  os_mon
+                 ]},
+  {mod, { glitter_app, []}},
+  {env, []}
+ ]}.
