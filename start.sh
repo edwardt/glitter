@@ -6,10 +6,18 @@ CONFIG=$1
 
 make
 
-if [[ ! -f ebin/glitter*.boot ]]; then
+if [[ ! -f $PWD/ebin/glitter*.boot ]]   
+  then
 	make boot
-fi
+  fi
 
-erl -pa $PWD/ebin \
-    -glitter config_file "\"$CONFIG\"" \
-    -boot glitter-$VERSION
+exec erl -pa \ 
+    $PWD/ebin \
+    $PWD/deps/*ebin \
+    -boot $PWD/glitter-$VERSION \
+    -s reloader \
+    -glitter config_file "\"$CONFIG\""
+
+#erl -pa $PWD/ebin \
+#    -glitter config_file "\"$CONFIG\"" \
+#    -boot glitter-$VERSION

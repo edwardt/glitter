@@ -44,7 +44,7 @@ write_scripts(A, Dest) ->
   LowernameVersion = string:to_lower(Name ++ "-" ++ Version),
 
   Filename = lists:flatten(LowernameVersion ++ ".rel"),
-  io:format("Writing to ~p (as ~s)~n", [Filename, Lowername]),
+  io:format("Writing to ~p (as ~s) ~n", [Filename, Lowername]),
   {ok, Fs} = file:open(Filename, [write]),
 
   io:format(Fs, Rel, [Name, Version, Erts, Kernel, Stdlib, Sasl, Lowername, Version, OtherApps]),

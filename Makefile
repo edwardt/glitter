@@ -1,3 +1,4 @@
+REBAR					= ./rebar
 LIBDIR					= `erl -eval 'io:format("~s~n", [code:lib_dir()])' -s init stop -noshell`
 VERSION					= $(shell cat VERSION | tr -d '\n')
 CC					= erlc
@@ -16,10 +17,10 @@ VERBOSE				        = -v
 all: compile boot
 
 compile: deps
-	@(./rebar compile)
+	@($(REBAR) compile)
 
 deps:
-	@(./rebar get-deps)
+	@($(REBAR) get-deps)
 
 boot:
 	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot write_scripts $(APP) $(VERSION);)
@@ -28,14 +29,22 @@ edoc:
 	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[{preprocess, true},{includes, ["."]}]'
 
 test: compile
-	@(./rebar skip_deps=true eunit)
+	@rm -rf .eunit
+	@mkdir -p .eunit
+	@($(REBAR) skip_deps=true eunit)
+
+build_plt: 
+	@$(REBAR) built-plt
+
+dialyzer:
+	@$(REBAR) dialyze
 
 get-deps: clean
-	@(./rebar $(VERBOSE) get-deps)
+	@($(REBAR) $(VERBOSE) get-deps)
 
 delete-deps: 
-	@(./rebar $(VERBOSE) delete-deps)
+	@($(REBAR) $(VERBOSE) delete-deps)
 	
 clean:
-	@(./rebar $(VERBOSE) clean)
+	@($(REBAR) $(VERBOSE) clean)
 
