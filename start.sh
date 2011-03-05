@@ -8,7 +8,7 @@ make
 
 if [[ ! -f $PWD/ebin/glitter*.boot ]]   
   then
-	make boot
+	make boot local
   fi
 
 exec erl -pa \ 

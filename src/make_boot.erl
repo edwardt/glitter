@@ -24,6 +24,9 @@ write_scripts(A, Dest) ->
   io:format("write_scripts for ~p~n", [Name]),
   Erts = erlang:system_info(version),
   application:load(sasl),
+  application:load(os_mon),
+  application:load(crypto),
+  application:load(ssl),
 
   {value, {kernel, _, Kernel}} = lists:keysearch(kernel, 1,
           application:loaded_applications()),
@@ -31,9 +34,18 @@ write_scripts(A, Dest) ->
           application:loaded_applications()),
   {value, {sasl, _, Sasl}} = lists:keysearch(sasl, 1,
           application:loaded_applications()),
+  {value, {os_mon, _, Osmon}} = lists:keysearch(os_mon, 1,
+          application:loaded_applications()),
+ % {value, {crypto, _, Crypto}} = lists:keysearch(crypto, 1,
+ %         application:loaded_applications()),
+ % {value, {ssl, _, Ssl}} = lists:keysearch(ssl, 1,
+ %         application:loaded_applications()),
+
 
   Rel = "{release, {\"~s\", \"~s\"}, {erts, \"~s\"}, ["
-        "{kernel, \"~s\"}, {stdlib, \"~s\"}, {sasl, \"~s\"}, {~s, \"~s\"}~s]}.",
+        "{kernel, \"~s\"}, {stdlib, \"~s\"}, {sasl, \"~s\"}, 
+         {os_mon, \"~s\"}, 
+         {~s, \"~s\"}~s]}.",
  
   OtherApps = lists:foldl(fun(Elem, AccIn) ->
               {N1, V1} = Elem, 
@@ -47,7 +59,8 @@ write_scripts(A, Dest) ->
   io:format("Writing to ~p (as ~s) ~n", [Filename, Lowername]),
   {ok, Fs} = file:open(Filename, [write]),
 
-  io:format(Fs, Rel, [Name, Version, Erts, Kernel, Stdlib, Sasl, Lowername, Version, OtherApps]),
+  io:format(Fs, Rel, [Name, Version, Erts, Kernel, Stdlib, 
+            Sasl, Osmon, Lowername, Version, OtherApps]),
   file:close(Fs),
 
   case Dest of

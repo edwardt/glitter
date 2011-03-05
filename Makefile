@@ -11,6 +11,8 @@ DEPS_DIR 				= deps
 EBIN_DIRS				= $(wildcard $(DEPS_DIR)/*/ebin) $(wildcard include/*/ebin)
 APP					= glitter
 VERBOSE				        = -v
+LOCAL					= write_scripts
+RELEASE					= write_release_scripts
 
 .PHONY: deps
 
@@ -23,7 +25,11 @@ deps:
 	@($(REBAR) get-deps)
 
 boot:
-	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot write_scripts $(APP) $(VERSION);)
+	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(LOCAL) $(APP) $(VERSION);)
+
+bootRel:
+	(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(RELEASE) $(APP) $(VERSION);)
+
 
 edoc:
 	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[{preprocess, true},{includes, ["."]}]'
