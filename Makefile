@@ -19,7 +19,8 @@ RELEASE					= write_release_scripts
 all: compile
 
 compile: deps
-	@($(REBAR) compile)
+        @sed -i.bak 's/%%VERSION%%/'"$VERSION"'/g' $(PWD)/src/$(APP).app.src
+ 	@$(REBAR) compile
 
 deps:
 	@($(REBAR) get-deps)
