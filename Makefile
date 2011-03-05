@@ -19,16 +19,18 @@ RELEASE					= write_release_scripts
 all: compile
 
 compile: deps
-	@sed -i.bak 's/%%VERSION%%/'"$VERSION"'/g' $(PWD)/src/$(APP).app.src
-	@$(REBAR) compile
+	@cd $(PWD); cd ./src; sed -i.bak 's/%%VERSION%%/'"$(VERSION)"'/g' $(APP).app.src
+	@cd $(PWD); $(REBAR) compile
+	@cd $(PWD); cd ./src; sed -i.bak 's/'"$(VERSION)"'/%%$VERSION%%/g' $(APP).app.src
 
 deps:
 	@($(REBAR) get-deps)
 
 rel: all	
 	@cd $(PWD); rm -rf rel; mkdir -p rel
-	%make boot script	
-	@$(REBAR) generate
+	#%make boot script
+		
+#	@$(REBAR) generate
 
 boot_fixme:
 	@(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(LOCAL) $(APP) $(VERSION);)
