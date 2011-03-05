@@ -12,11 +12,11 @@
   glitter_sup,
   glitter_conf,
   app_util,
-  gen_server_cluster,
-  make_boot
+  gen_server_cluster
+ 
   ]},
-  {registered,   []},
-  {applications, [kernel, stdlib, sasl]},
+  {registered,   [glitter]},
+  {applications, [kernel, stdlib, sas, os_mon]},
   {mod, {glitter_app, []}}
  ]
 }.

@@ -21,12 +21,13 @@ write_scripts(A, Dest) ->
   [Primary|Others] = Args,
   {Name, Version} = Primary,
 
-  io:format("write_scripts for ~p~n", [Name]),
+  io:format("write ~w scripts for ~p~n", [Dest, Name]),
+  
   Erts = erlang:system_info(version),
-  application:load(sasl),
-  application:load(os_mon),
-  application:load(crypto),
-  application:load(ssl),
+  ok = application:load(sasl),
+  ok = application:load(os_mon),
+  ok = application:load(crypto),
+  ok = application:load(ssl),
 
   {value, {kernel, _, Kernel}} = lists:keysearch(kernel, 1,
           application:loaded_applications()),
@@ -49,7 +50,7 @@ write_scripts(A, Dest) ->
  
   OtherApps = lists:foldl(fun(Elem, AccIn) ->
               {N1, V1} = Elem, 
-              AccIn ++ io_lib:format(", {~p, ~p}", [list_to_atom(N1), V1])
+              AccIn ++ io_lib:format(", {~p, ~p} ~n", [list_to_atom(N1), V1])
       end, "", Others),
 
   Lowername        = string:to_lower(Name),
@@ -57,18 +58,25 @@ write_scripts(A, Dest) ->
 
   Filename = lists:flatten(LowernameVersion ++ ".rel"),
   io:format("Writing to ~p (as ~s) ~n", [Filename, Lowername]),
+  
+  io:format("XXX ~n"), 
   {ok, Fs} = file:open(Filename, [write]),
-
+  io:format("YYY ~n"),
   io:format(Fs, Rel, [Name, Version, Erts, Kernel, Stdlib, 
             Sasl, Osmon, Lowername, Version, OtherApps]),
+  io:format("ZZZ ~n"),
   file:close(Fs),
-
+  io:format("sasd ~n"),
   case Dest of
-      local   ->  systools:make_script(LowernameVersion, [local]);
+      local   ->  
+          io:format("Making boot script for local distribution"),
+	  systools:make_script(LowernameVersion, [local]);
       release -> 
+          io:format("Making release boot script for release distribution"),
           systools:make_script(LowernameVersion, [{path, ["deps/*/ebin"]}]),
           systools:make_tar(LowernameVersion)
   end,
+  io:format("halt ~n"),
   halt().
 
 pair_up([A, B | Tail]) ->
