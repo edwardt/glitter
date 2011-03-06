@@ -18,8 +18,7 @@
                   kernel,
                   stdlib, 
 		  sasl,
-		  os_mon,
-		  setup
+		  os_mon
                  ]},
   {mod, { glitter_app, []}},
   {env, []}

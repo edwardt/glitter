@@ -1,0 +1,35 @@
+Folder Structure:
+All folders structure follow OTP strictly. Or you will have a bad time making a release package (even though you can clean compile every time). This is for the full benefit of
+OTP hot code upgrade ....
+
+More details below.
+
+Compiling (brief notes)
+We are using Basho Tech Rebar tool.
+under  project root dir:
+make 
+
+or (keeping dependencies)
+./rebar clean 
+./rebar compile
+
+or (cleaning dependencies and clean compile)
+./rebar del-deps
+./rebar get-deps
+./rebar compile
+
+Making package.
+Get rid of the rel/glitter folder
+on project root folder
+./rebar -v -f generate
+Then test it out (at least that it loads)
+./relglitterl/bin/glitter console
+then
+application:which_applications().
+You should see a display showing glitter as  the app name, the versoon
+and the depedency app and their versions.
+
+BE VERY CAREFUL ABOUT our folder nameing, your registered app and app naming...
+
+I spent 1 day to fix up and am still learning..
+

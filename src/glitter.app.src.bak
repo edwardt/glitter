@@ -1,7 +1,7 @@
 {application, glitter,
  [
-  {description, "Erlang interface for gitolite. "},
-  {vsn, "%%VERSION%%"},
+  {description, "Erlang interface for gitolite."},
+  {vsn, "1" },
   {registered, [glitter]},
   {modules,      
     [
@@ -18,7 +18,8 @@
                   kernel,
                   stdlib, 
 		  sasl,
-		  os_mon
+		  os_mon,
+		  setup
                  ]},
   {mod, { glitter_app, []}},
   {env, []}

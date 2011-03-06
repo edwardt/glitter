@@ -41,7 +41,7 @@ start_link() ->
 %% specifications.
 %%--------------------------------------------------------------------
 init([]) ->
-  AppSrv = {the_glitter_srv,{glitter_srv, start_link,[]}, permanent,2000,worker,dynamic},
+  AppSrv = {glitter,{glitter, start_link,[]}, permanent,2000,worker,dynamic},
   
   {ok,{{one_for_one,5,10}, [AppSrv]}}.
 
