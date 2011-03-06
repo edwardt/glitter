@@ -68,6 +68,7 @@ app_util_test_()->
       fun app_stop_undef_app_test_case/0,
       fun set_appvalue_test_case/0,
       fun set_appvalue_undef_key_test_case/0,
+      fun set_appvalue_undef_app_test_case/0,
       fun get_all_value_test_case/0,
       fun get_value_test_case/0,
       fun get_value_undef_app_test_case/0,
@@ -78,17 +79,17 @@ app_util_test_()->
 setup() ->
  ok.
 
-cleanup(State) -> 
+cleanup(_State) -> 
  ok.
  
 app_start_test_case() ->
-  Ret0 = ensure_app_stop(sasl),  
+  ok = ensure_app_stop(sasl),  
   Ret = ensure_app_start(sasl),
   ?assertMatch(ok, Ret).
   
 app_already_start_test_case()->
- Ret = ensure_app_stop(sasl),
- Ret0 = ensure_app_start(sasl),
+ ok = ensure_app_stop(sasl),
+ ok = ensure_app_start(sasl),
  Ret1 = ensure_app_start(sasl),
  ?assertMatch(ok, Ret1).
  
@@ -100,13 +101,13 @@ app_start_undef_app_test_case()->
 % ?assertError({"no such file or directory","undefined.app"}, Ret).
  
 app_stop_test_case()->
- Ret = ensure_app_start(sasl),
+ ok = ensure_app_start(sasl),
  Ret0 = ensure_app_stop(sasl),
  ?assertEqual(ok, Ret0).
  
 app_already_stop_test_case()->
- Ret = ensure_app_start(sasl),
- Ret0 = ensure_app_stop(sasl),
+ ok = ensure_app_start(sasl),
+ ok = ensure_app_stop(sasl),
  Ret1 = ensure_app_stop(sasl),
  ?assertEqual(ok, Ret1).
 
@@ -125,11 +126,13 @@ set_appvalue_undef_key_test_case()->
  Ret = set_value(testapp, undefined, test_val),
  % TODO this has to deal with becasue it allows key namesd as undefined 
  %?assertEqual(undefined, Ret).
+ io:format("You can name a key undefined with even undefined as value."),
  ?assertEqual(ok, Ret).
  
 set_appvalue_undef_app_test_case()->
  Ret = set_value(undefined,undefined,test),
- ?assertEqual(undefined,Ret).
+ io:format("You can actually make an application with name undefined, key undefined"),
+ ?assertEqual(ok ,Ret).
  
 get_all_value_test_case()->
  ok = set_value(testapp2, testkey, testvalue),
@@ -150,6 +153,5 @@ get_value_undef_app_test_case()->
 get_value_undef_key_test_case()-> 
  Ret = get_value(testapp,somekey),
  ?assertEqual(undefined, Ret) .
- 
 
 -endif.
