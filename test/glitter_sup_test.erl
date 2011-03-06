@@ -2,12 +2,16 @@
 -ifdef (TEST).
 -include_lib("eunit/include/eunit.hrl").
 
-startup_test_()->
- {}.
+start_stop_test_()->
+  {"normal sup startup test",
+    setup,
+    fun setup/0,
+    fun()->
+    end,
+    fun teardown/0
+  }.
 
-
-shutdown_test_()->
- {}.
+%% Add more tests on different startup configs
 
 
 
