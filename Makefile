@@ -1,3 +1,6 @@
+#### TODO PLEASE CHECK RIAKS BUILD FLOW, WOULD LIKE TO INCORPORATE THEIR IDEAS FORM GIT 
+#### GIT TAGGING ang REVISION ....
+
 REBAR					= ./rebar
 LIBDIR					= `erl -eval 'io:format("~s~n", [code:lib_dir()])' -s init stop -noshell`
 VERSION					= $(shell cat VERSION | tr -d '\n')
@@ -11,8 +14,7 @@ DEPS_DIR 				= deps
 EBIN_DIRS				= $(wildcard $(DEPS_DIR)/*/ebin) $(wildcard include/*/ebin)
 APP					= glitter
 VERBOSE				        = -v
-LOCAL					= write_scripts
-RELEASE					= write_release_scripts
+
 
 .PHONY: deps
 
@@ -32,12 +34,10 @@ rel: all
 		
 #	@$(REBAR) generate
 
-boot_fixme:
-	@(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(LOCAL) $(APP) $(VERSION);)
-
-bootRel_fixme:
-	@(cd ebin; $(ERL) -init_debug -pa src -pa ebin -pz deps/*/ebin -noshell -run make_boot $(RELEASE) $(APP) $(VERSION);)
-
+rel_erlang: clean_rel
+	@mkdir -p rel; 
+#### WONT WORK NEEd to reltool files generated already ...
+	@$(REBAR) compile generate force=1
 
 edoc:
 	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[{preprocess, true},{includes, ["."]}]'
@@ -58,8 +58,10 @@ get-deps: clean
 
 delete-deps: 
 	@($(REBAR) $(VERBOSE) delete-deps)
-	
-clean:
-	@(cd $(PWD); rm -rf ./rel)
+
+clean_rel:
+	@(cd $(PWD); rm -rf ./rel)	
+
+clean: clean_rel
 	@($(REBAR) $(VERBOSE) clean)
 
