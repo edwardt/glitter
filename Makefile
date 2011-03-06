@@ -24,20 +24,15 @@ compile: deps
 	@cd $(PWD); cd ./src; sed -i.bak 's/VERSION/'"$(VERSION)"'/g' $(APP).app.src
 	@cd $(PWD); $(REBAR) compile
 	@cd $(PWD); cd ./src; sed -i.bak 's/'"$(VERSION)"'/VERSION/g' $(APP).app.src
-
+	
 deps:
 	@($(REBAR) get-deps)
 
 rel: all	
-	@cd $(PWD); rm -rf rel; mkdir -p rel
-	#%make boot script
-		
-#	@$(REBAR) generate
-
-rel_erlang: clean_rel
-	@mkdir -p rel; 
-#### WONT WORK NEEd to reltool files generated already ...
-	@$(REBAR) compile generate force=1
+	@cd $(PWD); rm -rf rel/$(APP)
+	@cd $(PWD); cd ./rel; sed -i.bak 's/VERSION/'"$(VERSION)"'/g' reltool.config
+	@$(REBAR) -v -f generate
+	@cd $(PWD); cd ./rel; sed -i.bak 's/'"$(VERSION)"'/VERSION/g' reltool.config
 
 edoc:
 	@$(ERL) -noshell -run edoc_run application '$(APP)' '"."' '[{preprocess, true},{includes, ["."]}]'
