@@ -19,9 +19,9 @@ RELEASE					= write_release_scripts
 all: compile
 
 compile: deps
-	@cd $(PWD); cd ./src; sed -i.bak 's/%%VERSION%%/'"$(VERSION)"'/g' $(APP).app.src
+	@cd $(PWD); cd ./src; sed -i.bak 's/VERSION/'"$(VERSION)"'/g' $(APP).app.src
 	@cd $(PWD); $(REBAR) compile
-	@cd $(PWD); cd ./src; sed -i.bak 's/'"$(VERSION)"'/%%$VERSION%%/g' $(APP).app.src
+	@cd $(PWD); cd ./src; sed -i.bak 's/'"$(VERSION)"'/VERSION/g' $(APP).app.src
 
 deps:
 	@($(REBAR) get-deps)

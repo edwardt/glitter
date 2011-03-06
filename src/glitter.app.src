@@ -1,7 +1,7 @@
 {application, glitter,
  [
   {description, "Erlang interface for gitolite."},
-  {vsn, "%%ERSION%%" },
+  {vsn, "VERSION" },
   {registered, [glitter]},
   {modules,      
     [
