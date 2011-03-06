@@ -11,16 +11,19 @@ make
 
 or (keeping dependencies)
 ./rebar clean 
+export VERSION=<your version number>
 ./rebar compile
 
 or (cleaning dependencies and clean compile)
 ./rebar del-deps
 ./rebar get-deps
+export VERSION=<your version number>
 ./rebar compile
 
 Making package.
 Get rid of the rel/glitter folder
 on project root folder
+export VERSION=<your version number>
 ./rebar -v -f generate
 Then test it out (at least that it loads)
 ./relglitterl/bin/glitter console
