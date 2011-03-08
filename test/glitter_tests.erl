@@ -37,13 +37,14 @@ readwrite_glitter_test_() ->
     fun writable_setup/0,
     fun teardown/1,
     [
-     fun add_repos/0,
-     fun remove_repos/0,
-     fun add_user_to_repos/0,
-     fun add_user_to_repos_that_doesnt_exist/0,
-     fun remove_user_from_repos/0,
-     fun set_and_list_groups/0,
-     fun add_user/0
+     {"Creating multiple repos",fun add_repos/0},
+     {"Removing a created repo", fun remove_repos/0},
+     {"Add user to a repo", fun add_user_to_repos/0},
+     {"Add user to an undefined repo", fun add_user_to_repos_that_doesnt_exist/0},
+     {"Remove a user from a repo", fun remove_user_from_repos/0},
+     {"Create membership groups and list groups", fun set_and_list_groups/0},
+     {"Just create a user to system", fun add_user/0},
+     {"Pass config to system test", fun config_arg_test/0}
     ]
    }
   }.
