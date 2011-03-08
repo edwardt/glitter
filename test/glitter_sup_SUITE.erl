@@ -18,7 +18,9 @@ ensure_not_loaded(App) when is_atom(App)->
   end.
 
 start_server_test()->
+  io:format("Start server test"),
   App = glitter,
+  io:format("Ensure no" ++ atom_to_list(App) ++ "in memory"),
   ok = ensure_not_started(App),
   ok = ensure_not_loaded(App),
   {ok, PID}  = glitter_sup:start_link(),
