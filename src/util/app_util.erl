@@ -218,12 +218,20 @@ optional_required_key_test_()->
  { inorder,
    { setup, fun setupConfigSet/0, fun cleanup/1,
      [
-      {"Ensure getting required in memory key value", fun required_key_from_memory/0},
-      {"Ensure getting required key from app env", fun required_key_from_env/0},
-      {"Ensure required in memory undefined key is undefined", fun required_undefine_key_from_memory/0},
-      {"Ensure required no value key is undefined", fun required_key_no_val_from_memory/0},
-      {"Ensure option in memory key is default value", fun optional_key_from_memory/0},
-      {"Ensure optional key from app env is default value", fun optional_key_from_env/0}
+      {"Ensure getting required in memory key value", 
+	fun required_key_from_memory/0},
+      {"Ensure getting required key from app env", 
+	fun required_key_from_env/0},
+      {"Ensure required in memory undefined key is undefined", 
+	fun required_undefine_key_from_memory/0},
+      {"Ensure required no value key is undefined", 
+	fun required_key_no_val_from_memory/0},
+      {"Ensure option in memory key is default value", 
+	fun optional_key_from_memory/0},
+      {"Ensure optional key from app env is default value", 
+	fun optional_key_from_env/0},
+      {"Ensure optional key from undefined app is default ", 
+	fun optional_key_from_undefined_app/0}
      ]
    }
  }.
@@ -240,27 +248,39 @@ required_key_from_memory()->
 required_undefine_key_from_memory()->
   App = testAppReq,
   InMemoryConfig = [{testAppReqKey, value2}],
-  Ret = [ F (InMemoryConfig) || F <- required(App, wrongKey)],
-  ?assertEqual([{wrongKey, undefined}], Ret ).
+  Ret = required(App, wrongKey),
+  ?assertEqual(undefined, Ret(InMemoryConfig) ).
 
 required_key_no_val_from_memory()->
-  InMemory = {test1, {key1}},
-  Ret = required(key1, InMemory),
-  ?assertEqual({key1, undefined}, Ret).
+  %App = testAppReq,
+  InMemoryConfig = [{testAppReqKey, value2}],
+  Ret = required(key1, testAppReqKey1),
+  ?assertEqual(undefined, Ret(InMemoryConfig)).
 
 required_key_from_env()->
-  ok = application:set_value(testtest, testkey, testval),
+  ok = application:set_env(testtest, testkey, testval),
+  InMemoryConfig = [{testAppReqKey, value2}],
   Ret = required(testtest, testkey),
-  ?assertEqual(testval, Ret).
+  ?assertEqual({testkey, testval}, Ret(InMemoryConfig)).
 
 optional_key_from_memory()->
-  InMemory = {test, {keytest}},
-  Ret = optional(testAppOpt0, testkeyOpt0, InMemory),
-  ?assertEqual(defaulttest, Ret). 
+  App = testAppOpt0,
+  InMemory = [{test, keytest}],
+  Ret = optional(App, testkeyOpt0, defaultVal),
+  ?assertEqual({testkeyOpt0, defaultVal}, Ret(InMemory)). 
 
 optional_key_from_env()->
-  ok = application:set_value(testApp0pt1, testkeyOpt1, testval1),
-  Ret = optional(testAppOpt1, testkeyOpt2, defaultOptVal1),
-  ?assertEqual(defaultOptVal1, Ret). 
+  App = testAppOpt1,
+  InMemory = [{test, keytest}],
+  ok = application:set_env(App, testkeyOpt1, testval1),
+  Ret = optional(App, testkeyOpt2, defaultOptVal1),
+  ?assertEqual({testkeyOpt2, defaultOptVal1}, Ret(InMemory)). 
+
+optional_key_from_undefined_app()->
+  App = undefinedApp,
+  ok = application:set_env(App, testkeyOpt1, testval1),
+  InMemory = [{test, keytest}],
+  Ret = optional(App, testKeyOpt1, defaultOptVal1),
+  ?assertMatch({testKeyOpt1, defaultOptVal1}, Ret(InMemory)).
 
 -endif.
