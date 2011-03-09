@@ -90,124 +90,150 @@ optional(App, Key, Default) when is_atom(Key) ->
 %% =========== unit tests ===========
 -ifdef(TEST).
 
-app_util_test_()->
+assert_app_running_state_test()->
+  {inorder,
+    { setup,
+      fun setup/0,
+      fun cleanup/1,
+      [
+        {"Ensure app start from clean", fun app_should_clean_start/0},
+        {"Ensure starting started, app remain started", fun app_already_start/0},
+        {"Ensure starting undefined app complains", fun app_start_undef_app/0},
+        {"Ensure stopping started app stops success", fun app_stop/0},
+        {"Ensure stopping stopped app has no effect", fun app_already_stop/0},
+        {"Ensure stopping undefined app has no effect", fun app_stop_undef_app/0}
+      ]
+    }
+  }.
+
+app_get_set_key_test_()->
+ {inorder,
   { setup,
     fun setup/0,
     fun cleanup/1,
     [
-      {"Ensure app start from clean", fun app_start_test_case/0},
-      fun app_already_start_test_case/0,
-      fun app_start_undef_app_test_case/0,
-      fun app_stop_test_case/0,
-      fun app_already_stop_test_case/0,
-      fun app_stop_undef_app_test_case/0,
-      fun set_appvalue_test_case/0,
-      fun set_appvalue_undef_key_test_case/0,
-      fun set_appvalue_undef_app_test_case/0,
-      fun get_all_value_test_case/0,
-      fun get_value_test_case/0,
-      fun get_value_undef_app_test_case/0,
-      fun get_value_undef_key_test_case/0,
-      fun get_value_or_default_undef_key_test_case/0,
-      fun required_key_from_memory/0,
-      fun required_key_from_env/0,
-      fun required_undefine_key_from_memory/0,
-      fun required_key_no_val_from_memory/0,
-      fun optional_key_from_memory/0,
-      fun optional_key_from_env/0
+      fun set_appvalue/0,
+      fun set_appvalue_undef_key/0,
+      fun set_appvalue_undef_app/0,
+      fun get_all_value/0,
+      fun get_value/0,
+      fun get_value_undef_app/0,
+      fun get_value_undef_key/0,
+      fun get_value_or_default_undef_key/0
     ]
-  }.
+  }}.
+
+
+
 setup() ->
  ok.
 
 cleanup(_State) -> 
  ok.
  
-app_start_test_case() ->
+app_should_clean_start() ->
   ok = ensure_app_stop(sasl),  
   Ret = ensure_app_start(sasl),
   ?assertMatch(ok, Ret).
   
-app_already_start_test_case()->
+app_already_start()->
   ok = ensure_app_stop(sasl),
   ok = ensure_app_start(sasl),
   Ret1 = ensure_app_start(sasl),
   ?assertMatch(ok, Ret1).
  
-app_start_undef_app_test_case()->
+app_start_undef_app()->
   Ret = ensure_app_start(undefined),
   io:format("Return value: ~p",[Ret]),
   {error, {"no such file or directory", _App}} = Ret.
   % ?assert(ok = ({error,_} = Ret)).
   % ?assertError({"no such file or directory","undefined.app"}, Ret).
  
-app_stop_test_case()->
+app_stop()->
   ok = ensure_app_start(sasl),
   Ret0 = ensure_app_stop(sasl),
   ?assertEqual(ok, Ret0).
  
-app_already_stop_test_case()->
+app_already_stop()->
   ok = ensure_app_start(sasl),
   ok = ensure_app_stop(sasl),
   Ret1 = ensure_app_stop(sasl),
   ?assertEqual(ok, Ret1).
 
 %TODO behavirou not symmetrical with start. 
-app_stop_undef_app_test_case()->
+app_stop_undef_app()->
   Ret = ensure_app_stop(undefined),
   ?assertMatch(ok, Ret).
 
-set_appvalue_test_case()->
+set_appvalue()->
   Ret = set_value(testapp, testkey, test_val),
   ?assertEqual(ok, Ret),
   Ret0 = application:get_env(testapp,testkey),
   ?assertMatch({ok,test_val},Ret0).
  
-set_appvalue_undef_key_test_case()->
+set_appvalue_undef_key()->
   Ret = set_value(testapp, undefined, test_val),
   % TODO this has to deal with becasue it allows key namesd as undefined 
   %?assertEqual(undefined, Ret).
   io:format("You can name a key undefined with even undefined as value."),
   ?assertEqual(ok, Ret).
  
-set_appvalue_undef_app_test_case()->
+set_appvalue_undef_app()->
   Ret = set_value(undefined,undefined,test),
   io:format("You can actually make an application with name undefined, key undefined"),
   ?assertEqual(ok ,Ret).
  
-get_all_value_test_case()->
+get_all_value()->
   ok = set_value(testapp2, testkey, testvalue),
   ok = set_value(testapp2, testkey1, testvalue1),
   Ret = lists:reverse(get_all_value(testapp2)),
   ?assertMatch([{testkey, testvalue}, {testkey1, testvalue1}],
               Ret).
  
-get_value_test_case()->
+get_value()->
   ok = set_value(testapp1,testkey1,testvalue),
   Ret = get_value(testapp1, testkey1),
   ?assertMatch({ok,testvalue}, Ret).
  
-get_value_undef_app_test_case()->
+get_value_undef_app()->
   Ret = get_value(undefined,somekey),
   ?assertEqual(undefined, Ret) .
  
-get_value_undef_key_test_case()-> 
+get_value_undef_key()-> 
  Ret = get_value(testapp,somekey),
  ?assertEqual(undefined, Ret) .
 
-get_value_or_default_undef_key_test_case()->
+get_value_or_default_undef_key()->
   Ret = get_value(testapp,keyfake,defaultval),
   ?assertMatch({ok,defaultVal}, Ret).
 
+optional_required_key_test_()->
+ { inorder,
+   { setup, fun setupConfigSet/0, fun cleanup/1,
+     [
+      {"Ensure getting required in memory key value", fun required_key_from_memory/0},
+      {"Ensure getting required key from app env", fun required_key_from_env/0},
+      {"Ensure required in memory undefined key is undefined", fun required_undefine_key_from_memory/0},
+      {"Ensure required no value key is undefined", fun required_key_no_val_from_memory/0},
+      {"Ensure option in memory key is default value", fun optional_key_from_memory/0},
+      {"Ensure optional key from app env is default value", fun optional_key_from_env/0}
+     ]
+   }
+ }.
+
+setupConfigSet()->
+ 
+ ok.
+
 required_key_from_memory()->
-  InMemory = {test1, {key1, value2}},
-  Ret = required(key1, InMemory),
-  ?assertEqual(value2, Ret).
+  InMemory = {testAppReq, {testAppReqkey, value2}},
+  Ret = required(testAppReq, testAppReqKey),
+  ?assertEqual(value2, Ret(InMemory)).
 
 required_undefine_key_from_memory()->
-  InMemory = {test1, {key1, value2}},
-  Ret = required(key2, InMemory),
-  ?assertEqual({key2, undefined}, Ret).
+  InMemory = {testAppReq, {testAppReqKey, value2}},
+  Ret = required(testAppReq, wrongKey),
+  ?assertEqual({wrongKey, undefined}, Ret(InMemory)).
 
 required_key_no_val_from_memory()->
   InMemory = {test1, {key1}},
