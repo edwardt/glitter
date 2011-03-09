@@ -40,9 +40,9 @@ get_value(App, Key) when is_atom(Key) ->
 get_value(App, Key, Default) when is_atom(Key) ->
   case application:get_env(App, Key) of 
       {ok, Value} ->
-           Value;
+           {ok, Value};
       _Else ->
-           Default
+           {ok, Default}
   end.
 
 set_value(App, Key, Value) when is_atom(App), is_atom(Key) ->
@@ -144,7 +144,7 @@ get_all_value_test_case()->
 get_value_test_case()->
  ok = set_value(testapp1,testkey1,testvalue),
  Ret = get_value(testapp1, testkey1),
- ?assertEqual(testvalue, Ret).
+ ?assertMatch({ok,testvalue}, Ret).
  
 get_value_undef_app_test_case()->
  Ret = get_value(undefined,somekey),
@@ -153,5 +153,9 @@ get_value_undef_app_test_case()->
 get_value_undef_key_test_case()-> 
  Ret = get_value(testapp,somekey),
  ?assertEqual(undefined, Ret) .
+
+get_value_or_default_ undef_key_test_case()->
+ Ret = get_value(testapp,keyfake,defaultval),
+ ?assertMatch({ok,defaultVal}, Ret).
 
 -endif.
