@@ -24,8 +24,8 @@ readonly_glitter_test_() ->
     fun setup/0,
     fun teardown/1,
     [
-     fun list_repos/0,
-     fun has_git_repos/0
+      {"Asserting auser has RW access to a repo", fun list_repos/0},
+      {"Asserting repo not present", fun has_git_repos/0}
     ]
    }
   }.
