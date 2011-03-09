@@ -158,14 +158,14 @@ app_get_set_key_test_()->
     fun setup/0,
     fun cleanup/1,
     [
-      fun set_appvalue/0,
-      fun set_appvalue_undef_key/0,
-      fun set_appvalue_undef_app/0,
-      fun get_all_values_from_memory/0,
-      fun get_value_from_memory/0,
-      fun get_value_undef_app/0,
-      fun get_value_undef_key/0,
-      fun get_value_or_default_undef_key/0
+      {"Setting application key", fun set_appvalue/0},
+      {"Setting undefined application key", fun set_appvalue_undef_key/0},
+      {"Setting key on undefined application", fun set_appvalue_undef_app/0},
+      {"Get all app keys values", fun get_all_values_from_memory/0},
+      {"Get one app key value", fun get_value_from_memory/0},
+      {"Get key values form undefined app", fun get_value_undef_app/0},
+      {"Get value on undefined key", fun get_value_undef_key/0},
+      {"Get value or default value on undefeind key", fun get_value_or_default_undef_key/0}
     ]
   }}.
 
@@ -208,7 +208,7 @@ get_value_undef_key()->
  ?assertEqual(undefined, Ret) .
 
 get_value_or_default_undef_key()->
-  Ret = get_value(testapp,keyfake,defaultval),
+  Ret = get_value(testapp,keyfake,defaultVal),
   ?assertMatch({ok,defaultVal}, Ret).
 
 optional_required_key_test_()->
