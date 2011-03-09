@@ -161,8 +161,8 @@ app_get_set_key_test_()->
       fun set_appvalue/0,
       fun set_appvalue_undef_key/0,
       fun set_appvalue_undef_app/0,
-      fun get_all_value/0,
-      fun get_value/0,
+      fun get_all_values_from_memory/0,
+      fun get_value_from_memory/0,
       fun get_value_undef_app/0,
       fun get_value_undef_key/0,
       fun get_value_or_default_undef_key/0
@@ -187,14 +187,14 @@ set_appvalue_undef_app()->
   io:format("You can actually make an application with name undefined, key undefined"),
   ?assertEqual(ok ,Ret).
  
-get_all_value()->
+get_all_values_from_memory()->
   ok = set_value(testapp2, testkey, testvalue),
   ok = set_value(testapp2, testkey1, testvalue1),
   Ret = lists:reverse(get_all_value(testapp2)),
   ?assertMatch([{testkey, testvalue}, {testkey1, testvalue1}],
               Ret).
  
-get_value()->
+get_value_from_memory()->
   ok = set_value(testapp1,testkey1,testvalue),
   Ret = get_value(testapp1, testkey1),
   ?assertMatch({ok,testvalue}, Ret).
