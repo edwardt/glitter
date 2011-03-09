@@ -37,7 +37,12 @@ get_all_value(App) when is_atom(App)->
   application:get_all_env(App).
 
 get_value(App, Key) when is_atom(Key) ->
-  get_value(App, Key, undefined).
+  case application:get_env(App, Key) of 
+      {ok, Value} ->
+           {ok, Value};
+      _Else ->
+           undefined
+  end.  
 
 get_value(App, Key, Default) when is_atom(Key) ->
   case application:get_env(App, Key) of 
@@ -106,31 +111,13 @@ assert_app_running_state_test()->
     }
   }.
 
-app_get_set_key_test_()->
- {inorder,
-  { setup,
-    fun setup/0,
-    fun cleanup/1,
-    [
-      fun set_appvalue/0,
-      fun set_appvalue_undef_key/0,
-      fun set_appvalue_undef_app/0,
-      fun get_all_value/0,
-      fun get_value/0,
-      fun get_value_undef_app/0,
-      fun get_value_undef_key/0,
-      fun get_value_or_default_undef_key/0
-    ]
-  }}.
-
-
 
 setup() ->
  ok.
 
 cleanup(_State) -> 
  ok.
- 
+
 app_should_clean_start() ->
   ok = ensure_app_stop(sasl),  
   Ret = ensure_app_start(sasl),
@@ -164,6 +151,23 @@ app_already_stop()->
 app_stop_undef_app()->
   Ret = ensure_app_stop(undefined),
   ?assertMatch(ok, Ret).
+
+app_get_set_key_test_()->
+ {inorder,
+  { setup,
+    fun setup/0,
+    fun cleanup/1,
+    [
+      fun set_appvalue/0,
+      fun set_appvalue_undef_key/0,
+      fun set_appvalue_undef_app/0,
+      fun get_all_value/0,
+      fun get_value/0,
+      fun get_value_undef_app/0,
+      fun get_value_undef_key/0,
+      fun get_value_or_default_undef_key/0
+    ]
+  }}.
 
 set_appvalue()->
   Ret = set_value(testapp, testkey, test_val),
