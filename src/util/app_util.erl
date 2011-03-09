@@ -9,7 +9,8 @@
          get_value/3,
          set_value/3,
          required/2,
-	 optional/3]).
+	 optional/3,
+	 read_config/2]).
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
@@ -91,6 +92,8 @@ optional(App, Key, Default) when is_atom(Key) ->
         {Key, Val}
   end.
  
+read_config(Config, Config_Spec) when is_function(Config_Spec) ->
+    [F(Config) || F <- Config_Spec].
 
 %% =========== unit tests ===========
 -ifdef(TEST).
@@ -165,7 +168,7 @@ app_get_set_key_test_()->
       {"Get one app key value", fun get_value_from_memory/0},
       {"Get key values form undefined app", fun get_value_undef_app/0},
       {"Get value on undefined key", fun get_value_undef_key/0},
-      {"Get value or default value on undefeind key", fun get_value_or_default_undef_key/0}
+      {"Get value or default on undefined key", fun get_value_or_default_undef_key/0}
     ]
   }}.
 
@@ -226,18 +229,19 @@ optional_required_key_test_()->
  }.
 
 setupConfigSet()->
- 
  ok.
 
 required_key_from_memory()->
-  InMemory = {testAppReq, {testAppReqkey, value2}},
-  Ret = required(testAppReq, testAppReqKey),
-  ?assertEqual(value2, Ret(InMemory)).
+  App = tedtAppReq,
+  InMemoryConfig = [{testAppReqKey, value2}],
+  Ret = required(App, testAppReqKey),
+  ?assertEqual({testAppReqKey, value2}, Ret(InMemoryConfig)).
 
 required_undefine_key_from_memory()->
-  InMemory = {testAppReq, {testAppReqKey, value2}},
-  Ret = required(testAppReq, wrongKey),
-  ?assertEqual({wrongKey, undefined}, Ret(InMemory)).
+  App = testAppReq,
+  InMemoryConfig = [{testAppReqKey, value2}],
+  Ret = [ F (InMemoryConfig) || F <- required(App, wrongKey)],
+  ?assertEqual([{wrongKey, undefined}], Ret ).
 
 required_key_no_val_from_memory()->
   InMemory = {test1, {key1}},
