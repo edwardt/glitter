@@ -24,7 +24,7 @@
 start_link()->
   gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-
+-spec config_spec()-> [{atom(), term()}].
 config_spec()->
   [ 
     app_util::required(port_number),
@@ -33,6 +33,7 @@ config_spec()->
     app_util:optional(log_dir, "../log")
   ].
 
+-spec call(atom()) -> undefined | {atom(), term()}.
 call(Key) when is_atom(Key)->
   case gen_server:call(?MODULE, {get_param, Key}) of
        undefined -> 
@@ -40,21 +41,25 @@ call(Key) when is_atom(Key)->
        Value -> Value
   end.
 
+-spec port_number() -> undefined | port(). 
 port_number()-> 
   call(port_number).   
 
+-spec key_dir()-> undefined | string().
 key_dir()->
   call(key_dir).
 
+-spec config_dir() -> undefined | string().
 config_dir()->
   call(config_dir).
 
+-spec log_name() -> undefined | string().
 log_name()->
   call(log_name).
 
+-spec log_dir() -> undefined | string().
 log_dir()->
   call(log_dir).
-
 
 init([])->
   Configs = app_util:read_config([], config_spec()),
