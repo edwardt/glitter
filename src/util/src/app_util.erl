@@ -93,7 +93,7 @@ optional(App, Key, Default) when is_atom(Key) ->
   end.
  
 read_config(Config, Config_Spec) when is_function(Config_Spec) ->
-    [F(Config) || F <- Config_Spec].
+    [ F(Config) || F <- Config_Spec].
 
 %% =========== unit tests ===========
 -ifdef(TEST).
@@ -282,5 +282,33 @@ optional_key_from_undefined_app()->
   InMemory = [{test, keytest}],
   Ret = optional(App, testKeyOpt1, defaultOptVal1),
   ?assertMatch({testKeyOpt1, defaultOptVal1}, Ret(InMemory)).
+
+
+read_config_test_()->
+  {inorder,
+    {setup,
+     fun config_setup/0,
+     fun cleanup/1,
+     [
+       {"Read config with required and optional keys",    
+          fun read_config_with_required_optional_config/0}
+     ]
+    }
+  }.
+
+config_setup()->
+  App = config_app, 
+  [required(App, reqKey), optional(App, optKey,defVal)].
+
+%get_existing_kv(Conf)->
+  %InMemoryConfig = [{testAppReqKey, value2}], 
+  %proplists:get_value(Key, Conf).
+%  ok.
+
+read_config_with_required_optional_config()->
+ % InMemoryConfig = [{testAppReqKey, value2}],
+ % Ret = read_config( get_exiting_kv(InMemoryConfig), config_setup()),
+ % ?assertMatch([undefined,{optKey,defVal}], Ret)
+  ok.
 
 -endif.
