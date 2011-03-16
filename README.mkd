@@ -52,6 +52,33 @@ are assumed to have already properly transformed in prior stage.
 
 
 
+
+Source Code arrangement
+==
+Top level Glitter Application
+--deps (dependency)
+--ebin  (erlang binary)
+--rel   (erlang release configs, metadata files, scripts, release bin)
+--src	(all the subordinate apps)
+  * glitter supervisors, applications code
+  -- priv (private files)
+  -- include 
+  <<each subfolder is an OTP app >>
+  -- utility (common utility library as an app)
+      --src
+      --include
+      --test
+  -- gl_admin (managment related functions)
+     <<same folder structure as an OTP app>>
+
+
+--test	(integeration tests on top app level)
+--sample (sample client code)
+*README, rebar, other scripts etc
+
+
+
+
 Status
 ==
 Parsing is functional.
