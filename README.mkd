@@ -62,11 +62,11 @@ Top level Glitter Application
 --src	(all the subordinate apps)
   * glitter supervisors, applications code
   -- priv (private files)
-  -- include 
+  -- include (state modelled as records, defines etc)
   <<each subfolder is an OTP app >>
   -- utility (common utility library as an app)
       --src
-      --include
+      --include 
       --test
   -- gl_admin (managment related functions)
      <<same folder structure as an OTP app>>
