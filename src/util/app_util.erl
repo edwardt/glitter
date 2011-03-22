@@ -1,5 +1,5 @@
 -module (app_util).
-
+-vsn('1.0').
 -author (edwardt.tril@gmail.com).
 
 -export([ensure_app_start/1, 
