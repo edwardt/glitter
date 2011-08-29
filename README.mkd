@@ -37,7 +37,7 @@ Development
 
 It is recommend that you set up your own git server and gitolite to 
 test it out on integeration level; preferrably sending command from 
-a seperate client machine. Passing/Failing unit tests may not be 
+a separate client machine. Passing/Failing unit tests may not be 
 sufficient to weed out account/process/file ownership issues.
 
 Parse and write configs for the gitolite admin repositories.
