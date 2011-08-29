@@ -1,3 +1,10 @@
+%%%-------------------------------------------------------------------
+%%% File    : conf_writer.erl
+%%% Author  : 
+%%% Description : configu reader for gitosis
+%%%
+%%% Created :  
+%%%-------------------------------------------------------------------
 -module(gitosis_conf_reader).
 -export([main/1]).
 
