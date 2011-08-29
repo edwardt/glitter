@@ -18,6 +18,7 @@ Installation
 
 * make clean
 * make install
+* for dependency like edown (generate git mark down), you need erlang source package (erlang_src in ubuntu) to get it compile.
 
 Basic usage
 ==
